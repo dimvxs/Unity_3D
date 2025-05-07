@@ -18,11 +18,11 @@ public class CameraScript : MonoBehaviour
     private float sensitiivityX = 2500.0f;
     private float minOffset = 1.5f;
     private float maxOffset = 12f;
-    private bool isFpv;
-    private float minAngle = 35f;
-    private float maxAngle = 90f;
-    private float minAngleFpv = -10f;
-    private float maxAngleFpv = 45f;
+    // public static bool isFpv;
+    // private float minAngle = 35f;
+    // private float maxAngle = 90f;
+    // private float minAngleFpv = -10f;
+    // private float maxAngleFpv = 45f;
     public static bool isFixed = false;
     public static Transform fixedCameraPosition = null!;
 
@@ -35,7 +35,7 @@ public class CameraScript : MonoBehaviour
         // lookAction = InputSystem.action.FindAction("Look"); //unity 6
         angleY = angleY0 = this.transform.eulerAngles.y;
         angleX = angleX0 = this.transform.eulerAngles.x;
-        isFpv = offset.magnitude < minOffset;
+        GameState.isFpv = offset.magnitude < minOffset;
         
     }
 
@@ -62,14 +62,14 @@ public class CameraScript : MonoBehaviour
         if(offset.magnitude < minOffset)
         {
           offset *= 0.01f;
-          isFpv = true;
+          GameState.isFpv = true;
         }
       }
       else if(zoom.y < 0){
-        if(isFpv)
+        if(GameState.isFpv)
         {
           offset *= minOffset / offset.magnitude;
-          isFpv = false;
+          GameState.isFpv = false;
         }
        
           if(offset.magnitude < maxOffset)
