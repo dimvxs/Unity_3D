@@ -37,7 +37,7 @@ public class FlashlightScript : MonoBehaviour
          {
              light.intensity = charge;
              // charge = Mathf.Clamp01(charge - Time.deltaTime / chargeLifetime);
-             charge -= charge < 0 ? 0 : charge - Time.deltaTime / chargeLifetime;
+             charge = charge < 0 ? 0 : charge - Time.deltaTime / chargeLifetime;
          }
          
          else
@@ -64,7 +64,7 @@ public class FlashlightScript : MonoBehaviour
             charge += 1.0f;
             GameObject.Destroy(other.gameObject);
             Debug.Log("battery collected: " + charge);
-            ToasterScript.Toast($"You found battery, your charge is: {charge:F1}");
+            ToasterScript.Toast($"You found battery, your charge is: {charge:F1}", 3.0f);
         }
         
         if (other.gameObject.CompareTag("LittleBattery"))
@@ -72,7 +72,7 @@ public class FlashlightScript : MonoBehaviour
             charge += 0.5f;
             GameObject.Destroy(other.gameObject);
             Debug.Log("battery collected: " + charge);
-            ToasterScript.Toast($"You found little battery, your charge is: {charge:F1}");
+            ToasterScript.Toast($"You found little battery, your charge is: {charge:F1}", 3.0f);
         }
         
     }

@@ -5,17 +5,24 @@ using UnityEngine;
 
 public class ToasterScript : MonoBehaviour
 {
-    private static GameObject content;
-    private static TMPro.TextMeshProUGUI text;
-    private static float timeout;
-    private static float showtime = 3.0f; //3 seconds
+    private CanvasGroup contentGroup;
+    private GameObject content;
+    private TMPro.TextMeshProUGUI text;
+    private float timeout;
+    private static ToasterScript instance;
+    private float showtime = 3.0f; // 3 seconds
+    private Queue<ToastMessage> messageQueue = new Queue<ToastMessage>();
     void Start()
     {
+        instance = this;
         Transform t = this.transform.Find("Content");
         content = t.gameObject;
+        contentGroup = content.GetComponent<CanvasGroup>();
         text = t.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
         content.SetActive(false);
         timeout = 0.0f;
+        GameState.AddListener(OnGameStateChanged);
+        GameEventSystem.Subscribe(OnGameEvent);
     }
 
     void Update()
@@ -23,19 +30,76 @@ public class ToasterScript : MonoBehaviour
         if (timeout > 0)
         {
             timeout -= Time.deltaTime;
+            contentGroup.alpha = Mathf.Clamp01(timeout * 2.0f);
             if (timeout < 0)
             {
                 content.SetActive(false);
             }
 
         }
+        
+        else if (messageQueue.Count > 0)
+        {
+            var msgToast = messageQueue.Dequeue();
+            content.SetActive(true);
+            text.text = msgToast.message;
+            timeout = msgToast.time;
+        }
       
     }
+    
+    private void OnGameStateChanged(string fieldName)
+    {
 
+        if (fieldName == nameof(GameState.isDay))
+        {
+            Toast(GameState.isDay ? "the day has come" : "the night has come");
+        }
+        // if (fieldName == nameof(GameState.isKey1Collected))
+        // {
+        //     Toast("You found blue key, now you can open blue doors");
+        // }
+        // else if (fieldName == nameof(GameState.isKey2Collected))
+        // {
+        //     Toast("You found green key, now you can open green doors");
+        // }
+        //
+        // else if (fieldName == nameof(GameState.isKey3Collected))
+        // {
+        //     Toast("You found red key, now you can open red doors");
+        // }
+    }
+    
+   
     public static void Toast(string message, float time = 3.0f)
     {
-        content.SetActive(true);
-        text.text = message;
-        timeout = time == 0.0f ? showtime : time;
+        // instance.content.SetActive(true);
+        // instance.text.text = message;
+        // instance.timeout = time == 0.0f ? instance.showtime : time;
+        instance.messageQueue.Enqueue(
+            new ToastMessage {
+            message = message,
+            time = time > 0.0f ? instance.showtime : time
+        });
+    }
+    
+    private void OnGameEvent(GameEvent gameEvent)
+    {
+        if (gameEvent.toast is string msg)
+        {
+            Toast(msg);
+        }
+    }
+
+    private void OnDestroy()
+    {
+       GameState.RemoveListener(OnGameStateChanged);
+       GameEventSystem.Unsubscribe(OnGameEvent);
+    }
+
+    private class ToastMessage
+    {
+        public string message {get; set;}
+        public float time {get; set;}
     }
 }

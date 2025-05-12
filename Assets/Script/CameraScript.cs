@@ -15,7 +15,7 @@ public class CameraScript : MonoBehaviour
     private float angleY0;
     private float angleX0;
     private float sensitiivityY = 5000.0f;
-    private float sensitiivityX = 2500.0f;
+    private float sensitiivityX = 5000.0f;
     private float minOffset = 1.5f;
     private float maxOffset = 12f;
     // public static bool isFpv;

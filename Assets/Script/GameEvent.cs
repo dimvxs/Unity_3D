@@ -1,0 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
+using JetBrains.Annotations;
+using UnityEngine;
+
+public class GameEvent 
+{
+ public string type { get; set; }
+ public object payload { get; set; } 
+ public string toast { get; set; }
+}
