@@ -17,21 +17,38 @@ public class GatesScript : MonoBehaviour
     private int hitCount;
     [SerializeField] private int keyNumber = 1;
     private bool isInTime = true;
+    private AudioSource openingSound1;
+    private AudioSource openingSound2;
+    private bool isOpened = false;
 
     void Start()
     {
         isKeyInserted = false;
         hitCount = 0;
         GameEventSystem.Subscribe(OnGameEvent);
+        openingSound1 = GetComponent<AudioSource>();
+        openingSound2 = GetComponent<AudioSource>();
+        AudioSource[] openingSounds = GetComponents<AudioSource>();
+        openingSound1 = openingSounds[0];
+        openingSound2 = openingSounds[1];
+        
     }
 
    
     
     void Update()
     {
-        if (isKeyInserted && transform.localPosition.magnitude < size)
+        if (!isOpened && isKeyInserted && transform.localPosition.magnitude < size)
         {
             transform.Translate(size * Time.deltaTime / openTime * openDirection);
+
+            if (transform.localPosition.magnitude >= size)
+            {
+                //Opening ends
+                isOpened = false;
+                openingSound1.Stop();
+                openingSound2.Stop();
+            }
         }
     }
     
@@ -41,14 +58,23 @@ public class GatesScript : MonoBehaviour
         {
             if (isKeyCollected)
             {
-                isKeyInserted = true;
-                openTime = isKey1InTime? openTime1 : openTime2;
-                GameEventSystem.EmitEvent(new GameEvent
+
+                if (!isKeyInserted)
                 {
-                    type = $"",
-                    payload = isInTime,
-                    toast = $"The door is opened key, now you can go"
-                });
+                    //opening begins
+                    isKeyInserted = true;
+                    openTime = isKey1InTime? openTime1 : openTime2;
+                    (isKeyInTime ? openingSound1 : openingSound2).Play();
+                    GameEventSystem.EmitEvent(new GameEvent
+                    {
+                        type = $"",
+                        payload = isInTime,
+                        toast = $"The door is opened key, now you can go"
+                    });
+                    
+                }
+             
+              
             }
             else
             {

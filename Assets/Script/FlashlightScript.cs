@@ -63,16 +63,28 @@ public class FlashlightScript : MonoBehaviour
         {
             charge += 1.0f;
             GameObject.Destroy(other.gameObject);
+            GameEventSystem.EmitEvent(new GameEvent
+            {
+                type = "Battery",
+                toast = $"You found battery, your charge is: {charge:F1}",
+                sound = EffectsSounds.batteryCollected
+            });
             Debug.Log("battery collected: " + charge);
-            ToasterScript.Toast($"You found battery, your charge is: {charge:F1}", 3.0f);
+            // ToasterScript.Toast($"You found battery, your charge is: {charge:F1}", 3.0f);
         }
         
         if (other.gameObject.CompareTag("LittleBattery"))
         {
             charge += 0.5f;
             GameObject.Destroy(other.gameObject);
+            GameEventSystem.EmitEvent(new GameEvent
+            {
+                type = "battery",
+                toast = $"You found battery, your charge is: {charge:F1}",
+                sound = "battery"
+            });
             Debug.Log("battery collected: " + charge);
-            ToasterScript.Toast($"You found little battery, your charge is: {charge:F1}", 3.0f);
+            // ToasterScript.Toast($"You found little battery, your charge is: {charge:F1}", 3.0f);
         }
         
     }

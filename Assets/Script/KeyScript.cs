@@ -57,7 +57,10 @@ public class KeyScript : MonoBehaviour
                 {
                     type = $"Key{keyNumber}Collected",
                     payload = isInTime,
-                    toast = $"You found {keyNumber} key, now you can open {description} doors"
+                    toast = $"You found {keyNumber} key, now you can open {description} doors",
+                    sound = isInTime
+                    ? EffectsSounds.keyCollectedInTime
+                    : EffectsSounds.keyCollectedOutOfTime,
                 });
             Destroy(this.gameObject);
         }
