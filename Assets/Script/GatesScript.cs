@@ -50,6 +50,19 @@ public class GatesScript : MonoBehaviour
                 openingSound2.Stop();
             }
         }
+
+        if ((openingSound1.isPlaying || openingSound2.isPlaying))
+        {
+            if (Time.timeScale == 0.0f)
+            {
+                openingSound1.volume = openingSound2.volume = 
+                Time.timeScale == 0.0f ? 0.0f : GameState.effectsVolume;
+            }
+            else
+            {
+                
+            }
+        }
     }
     
     private void OnCollisionEnter(Collision collision)

@@ -167,6 +167,39 @@ public class GameState
     }
   }
   #endregion
+  
+  #region float effectsVolume
+  private static float _effectsVolume = 0.07f;
+  public static float effectsVolume
+  {
+    get => _effectsVolume;
+    set
+    {
+      if (_effectsVolume != value)
+      {
+        _effectsVolume = value;
+        Notify(nameof(effectsVolume));
+      }
+    }
+  }
+  #endregion
+  
+  #region float musicVolume
+  private static float _musicVolume = 0.007f;
+  public static float musicVolume
+  {
+    get => _musicVolume;
+    set
+    {
+      if (_musicVolume != value)
+      {
+        _musicVolume = value;
+        Notify(nameof(musicVolume));
+      }
+    }
+  }
+  #endregion
+
 
 
   #region Change Notifier
