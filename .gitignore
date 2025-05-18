@@ -31,3 +31,6 @@ sysinfo.txt
 *.sln.iml
 Assets/AssetStoreTools*
 *.unitypackage
+Build.app/Contents/Frameworks/UnityPlayer.dylib
+Build.app/Contents/Resources/Data/sharedassets0.assets.resS
+
