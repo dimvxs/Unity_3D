@@ -29,8 +29,12 @@ public class GatesScript : MonoBehaviour
         openingSound1 = GetComponent<AudioSource>();
         openingSound2 = GetComponent<AudioSource>();
         AudioSource[] openingSounds = GetComponents<AudioSource>();
-        openingSound1 = openingSounds[0];
-        openingSound2 = openingSounds[1];
+        if(openingSounds.Length > 0)  openingSound1 = openingSounds[0];
+        if(openingSounds.Length > 1) openingSound2 = openingSounds[1];
+        GameEventSystem.Subscribe(OnGameEvent);
+        GameState.AddListener(OnGameStateChanged);
+        OnGameStateChanged(null);
+     
         
     }
 
@@ -51,17 +55,20 @@ public class GatesScript : MonoBehaviour
             }
         }
 
-        if ((openingSound1.isPlaying || openingSound2.isPlaying))
+        // if ((openingSound1.isPlaying || openingSound2.isPlaying))
+        // {
+        //     if (Time.timeScale == 0.0f)
+        //     {
+        //         openingSound1.volume = openingSound2.volume = 
+        //         Time.timeScale == 0.0f ? 0.0f : GameState.effectsVolume;
+        //     }
+        //   
+        // }
+        if (openingSound1.isPlaying || openingSound2.isPlaying)
         {
-            if (Time.timeScale == 0.0f)
-            {
-                openingSound1.volume = openingSound2.volume = 
-                Time.timeScale == 0.0f ? 0.0f : GameState.effectsVolume;
-            }
-            else
-            {
-                
-            }
+            float volume = (Time.timeScale == 0.0f) ? 0.0f : GameState.gatesVolume;
+            openingSound1.volume = volume;
+            openingSound2.volume = volume;
         }
     }
     
@@ -115,9 +122,19 @@ public class GatesScript : MonoBehaviour
             isKeyInTime = (bool)gameEvent.payload;
         }
     }
+    private void OnGameStateChanged(string fieldName)
+    {
+        if(fieldName == null || fieldName == nameof(GameState.effectsVolume))
+        {
+            if(openingSound1 != null) openingSound1.volume = GameState.musicVolume;
+            if(openingSound2 != null) openingSound2.volume = GameState.musicVolume;
+        }
 
+    }
+    
     private void OnDestroy()
     {
         GameEventSystem.Unsubscribe(OnGameEvent);
+        GameState.RemoveListener(OnGameStateChanged);
     }
 }

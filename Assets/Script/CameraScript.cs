@@ -44,7 +44,7 @@ public class CameraScript : MonoBehaviour
     { 
 
       // приближение - отдаление
-      Vector2 zoom = Input.mouseScrollDelta; //y: 1 приближение, -1 отдаление
+      Vector2 zoom = Input.mouseScrollDelta * Time.timeScale; //y: 1 приближение, -1 отдаление
 
       // if(zoom != Vector2.zero){
       // Debug.Log(zoom);

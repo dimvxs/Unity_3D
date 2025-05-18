@@ -185,7 +185,7 @@ public class GameState
   #endregion
   
   #region float musicVolume
-  private static float _musicVolume = 0.007f;
+  private static float _musicVolume = 0.27f;
   public static float musicVolume
   {
     get => _musicVolume;
@@ -199,6 +199,24 @@ public class GameState
     }
   }
   #endregion
+  
+  #region float gatesVolume
+  private static float _gatesVolume = 0.07f;
+  public static float gatesVolume
+  {
+    get => _gatesVolume;
+    set
+    {
+      if (_gatesVolume != value)
+      {
+        _gatesVolume = value;
+        Notify(nameof(gatesVolume));
+      }
+    }
+  }
+  #endregion
+  
+
 
 
 
@@ -222,6 +240,15 @@ public class GameState
     }
   }
   #endregion
+
+  public static void Addlistener(Action<string> listener)
+  {
+    listeners.Add(listener);
+    listener(null);
+  }
+  
+
+
 
   public static void SetProperty(string name, object value)
   {
