@@ -52,6 +52,7 @@ public class KeyScript : MonoBehaviour
             // var prop = typeof(GameState).GetProperty("isKey1Collected", System.Reflection.BindingFlags.Static  | System.Reflection.BindingFlags.Public);
             // prop.SetValue(null, true);
             // GameState.isKey1Collected = true;
+            GameState.bag.Add($"Key{keyNumber}", 1);
             GameState.SetProperty($"isKey{keyNumber}Collected", true);
             GameEventSystem.EmitEvent(new GameEvent
                 {

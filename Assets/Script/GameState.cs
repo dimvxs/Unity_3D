@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameState 
+public class GameState
 {
+
+  public static Dictionary<string, int> bag { get; } = new Dictionary<string, int>();
   
   #region bool isDay
   private static bool _isDay = true;

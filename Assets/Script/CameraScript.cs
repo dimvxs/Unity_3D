@@ -19,8 +19,8 @@ public class CameraScript : MonoBehaviour
     private float minOffset = 1.5f;
     private float maxOffset = 12f;
     // public static bool isFpv;
-    // private float minAngle = 35f;
-    // private float maxAngle = 90f;
+    private float minAngle = -10f;
+    private float maxAngle = 80f;
     // private float minAngleFpv = -10f;
     // private float maxAngleFpv = 45f;
     public static bool isFixed = false;
@@ -31,6 +31,7 @@ public class CameraScript : MonoBehaviour
 
     void Start()
     {
+      cameraAnchor = GameObject.Find("Player").transform;
         offset = this.transform.position - cameraAnchor.position;
         // lookAction = InputSystem.action.FindAction("Look"); //unity 6
         angleY = angleY0 = this.transform.eulerAngles.y;
@@ -83,21 +84,33 @@ public class CameraScript : MonoBehaviour
 
         //обороты - анализ движений мышки и поворот камеры в соответствии с их размерами, варианты: а) поворачивать в бок курсора, б) копить угол поворота. в этом примере используется вариант б
 
-        Vector2 lookValue = Time.deltaTime * new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        // Vector2 lookValue = Time.deltaTime * new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
      // Vector2 lookValue = lookAction.ReadValue<Vector2>(); //unity 6
 
 // как lookAction, так и Input.GetAxis поворачивают данные про смезение курсора, а не его позицию, если курсор мыши не двигается, то сигнал = 0
 // для того, чтобы найти полный угол, необходимо накапливать все сигналы (интегрировать сигнал)
-        angleY += lookValue.x * sensitiivityY;
-        angleX -= lookValue.y * sensitiivityX;
+        // angleY += lookValue.x * sensitiivityY;
+        // angleX -= lookValue.y * sensitiivityX;
         // this.transform.eulerAngles = new Vector3(this.transform.eulerAngles.x, angleY, 0f);
-        this.transform.eulerAngles = new Vector3(angleX, angleY, 0f);
+        // this.transform.eulerAngles = new Vector3(angleX, angleY, 0f);
         
          //1. следование
          //идея - созранение размещения камеры и персонажа (offset)
          //при сменной позиции остального
-       transform.position = cameraAnchor.position + Quaternion.Euler(angleX - angleX0, angleY - angleY0, 0f) * offset;
+       // transform.position = cameraAnchor.position + Quaternion.Euler(angleX - angleX0, angleY - angleY0, 0f) * offset;
+     
        
+       
+       Vector2 lookValue = Time.deltaTime * new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
+       angleY += lookValue.x * sensitiivityY;
+       angleX -= lookValue.y * sensitiivityX;
+       angleX = Mathf.Clamp(angleX, minAngle, maxAngle); // ограничение угла вверх/вниз
+
+       this.transform.eulerAngles = new Vector3(angleX, angleY, 0f);
+
+       transform.position = cameraAnchor.position + Quaternion.Euler(angleX - angleX0, angleY - angleY0, 0f) * offset;
+
       }
     }
 }

@@ -5,11 +5,32 @@ using UnityEngine;
 public class PlayerScript : MonoBehaviour
 {
     private Rigidbody rb;
+    private static PlayerScript prevInstance = null;
     // private InputAction moveAction;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        if (prevInstance != null) // in the start moment exists another object of this class
+        {
+            //скорее всего, prevInstance - обьект DontDestroyOnLoad, которыйперезодит с предыдущей сцены
+            // нужно принять решение, какой обьект должен остаться: this или prevInstance
+            // a)оставляем this, тогда переносим необхожимые харктеристики из prevInstance и удаляем его
+
+            // this.rb.velocity = prevInstance.rb.velocity;
+            // this.rb.angularVelocity = prevInstance.rb.angularVelocity;
+            // GameObject.Destroy(prevInstance.gameObject);
+            
+            
+            // б) оставляем prevInstance, просто удаляем this
+            GameObject.Destroy(this.gameObject);
+        }
+        else
+        {
+            prevInstance = this; //saving reference to current object in static field
+
+        }
+        
         // moveAction = InputSystem.actions.FindAction("Move");
     }
 
