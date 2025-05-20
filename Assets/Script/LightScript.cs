@@ -124,8 +124,8 @@ if(GameState.isDay)
                 }
             }
 
-                RenderSettings.ambientIntensity = 0.0f;
-                RenderSettings.reflectionIntensity = 0.0f;
+                RenderSettings.ambientIntensity = 0.5f;
+                RenderSettings.reflectionIntensity = 0.5f;
     }
     }
 
