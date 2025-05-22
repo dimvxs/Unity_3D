@@ -6,6 +6,7 @@ public class PlayerScript : MonoBehaviour
 {
     private Rigidbody rb;
     private static PlayerScript prevInstance = null;
+    float moveForce = 2f;
     // private InputAction moveAction;
     // Start is called before the first frame update
     void Start()
@@ -30,7 +31,6 @@ public class PlayerScript : MonoBehaviour
             prevInstance = this; //saving reference to current object in static field
 
         }
-        
         // moveAction = InputSystem.actions.FindAction("Move");
     }
 
@@ -60,6 +60,6 @@ public class PlayerScript : MonoBehaviour
         Vector3 force = 
         camForward * moveValue.y +  //сигнал Y вдоль вектора исправленного forward
         camRight * moveValue.x;  //сигнал Y вдоль вектора right
-        rb.AddForce(force);
+        rb.AddForce(force.normalized * moveForce); 
     }
 }
